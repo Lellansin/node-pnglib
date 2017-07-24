@@ -1,6 +1,6 @@
 {
   "name": "node-pnglib",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Node.js version for PNGlib.",
   "main": "./lib/pnglib.js",
   "scripts": {
@@ -10,6 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/Lellansin/node-pnglib.git"
   },
+  "keywords": [
+    "pictrue",
+    "png",
+    "pnglib"
+  ],
   "author": "lellansin",
   "license": "BSD-2-Clause",
   "bugs": {
