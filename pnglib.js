@@ -133,8 +133,8 @@ class PNGlib {
     return this.palette.get(color);
   }
 
-  setPixel(x, y, color) {
-    this.buffer[this.index(Math.floor(x), Math.floor(y))] = this.color(...color);
+  setPixel(x, y, rgba) {
+    this.buffer[this.index(Math.floor(x), Math.floor(y))] = this.color(rgba);
   }
 
   // output a PNG string, Base64 encoded
