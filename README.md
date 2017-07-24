@@ -8,14 +8,12 @@ Node.js version for [PNGlib](http://www.xarg.org/2010/03/generate-client-side-pn
 http.createServer(function (req, res) {
   if(req.url == '/favicon.ico') return res.end('');
 
-  var p = new pnglib(80, 30, 8);
-  var lineIndex = p.index(0, 15);
+  // setup PNG with width 80, height 30
+  var p = new pnglib(80, 30);
+  var index = p.index(0, 15);
   for (var i = 0; i < 40; i++) {
-    p.buffer[lineIndex + i] = 1;
+    p.buffer[index + i] = p.color('blue'); // paint (red, green, blue, alpha)
   }
-  
-  p.color(0, 0, 0, 0);  // First color: background (red, green, blue, alpha)
-  p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha)
 
   res.setHeader('Content-Type', 'image/png');
   res.end(p.getBuffer());

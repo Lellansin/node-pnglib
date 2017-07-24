@@ -1,5 +1,7 @@
 'use strict';
 
+const Color = require('./lib/rgba');
+
 const ENCODING = 'ascii';
 const CODE_NUL = Buffer.from('\x00', ENCODING);
 const CODE_SOH = Buffer.from('\x01', ENCODING);
@@ -36,14 +38,14 @@ const CRC_TABLE = function () {
 }();
 
 class PNGlib {
-  constructor (width, height, depth, bg) {
-    this.width  = width;
-    this.height = height;
-    this.depth  = depth || 8;
+  constructor (w, h, d, bg) {
+    this.width  = w;
+    this.height = h;
+    this.depth  = d || 8;
     this.bg     = bg;
 
     // pixel data and row filter identifier size
-    this.pix_size = height * (width + 1);
+    this.pix_size = this.height * (this.width + 1);
 
     // deflate header, pix_size, block headers, adler32 checksum
     this.data_size = 2 + this.pix_size + 5 * Math.floor((0xfffe + this.pix_size) / 0xffff) + 4;
@@ -66,7 +68,7 @@ class PNGlib {
     this.pindex  = 0;
 
     // initialize non-zero elements
-    write(this.buffer, this.ihdr_offs, byte4(this.ihdr_size - 12), PNG_IHDR, byte4(width), byte4(height), CODE_X08X03);
+    write(this.buffer, this.ihdr_offs, byte4(this.ihdr_size - 12), PNG_IHDR, byte4(this.width), byte4(this.height), CODE_X08X03);
     write(this.buffer, this.plte_offs, byte4(this.plte_size - 12), PNG_PLTE);
     write(this.buffer, this.trns_offs, byte4(this.trns_size - 12), PNG_tRNS);
     write(this.buffer, this.idat_offs, byte4(this.idat_size - 12), PNG_IDAT);
@@ -100,7 +102,17 @@ class PNGlib {
 
   // convert a color and build up the palette
   color(red, green, blue, alpha) {
-    alpha = alpha >= 0 ? alpha : 255;
+    if (typeof red == 'string') {
+      let rgba = Color(red);
+      if (!rgba) {
+        throw new Error(`invalid color ${rgba}`);
+      }
+      [red, green, blue, alpha] = rgba;
+    }
+    else {
+      alpha = alpha >= 0 ? alpha : 255;
+    }
+
     const color = (((((alpha << 8) | red) << 8) | green) << 8) | blue;
 
     if (typeof this.palette[color] == 'undefined') {
