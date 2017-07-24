@@ -36,7 +36,7 @@ Output:
 
 ```javascript
 const fs = require('fs');
-const PNGlib = require('..');
+const PNGlib = require('node-pnglib');
 
 let png = new PNGlib(200, 200);
 

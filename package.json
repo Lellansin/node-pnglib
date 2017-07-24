@@ -1,10 +1,11 @@
 {
   "name": "node-pnglib",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Pure Javascript lib for generate PNG.",
   "main": "./lib/pnglib.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec",
+    "coveralls": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/Lellansin/node-pnglib#readme",
   "devDependencies": {
+    "coveralls": "^2.13.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
     "should": "^11.2.1"
   },

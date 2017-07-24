@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+node_js:
+  - "6.4.0"
+  - "6.11.0"
+  - "7.5.0"
+  - "7.10.0"
+  - "8.1.2"
+  - "stable"
+after_script:
+  - npm run coveralls
+git:
+  depth: 10
