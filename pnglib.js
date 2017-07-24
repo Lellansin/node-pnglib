@@ -120,6 +120,11 @@ class PNGlib {
     return Buffer.concat([PNG_HEAD, this.getDump()]).toString('base64');
   }
 
+  // output a PNG buffer
+  getBuffer() {
+    return Buffer.concat([PNG_HEAD, this.getDump()]);
+  }
+
   // get PNG buffer
   getDump() {
     // compute adler32 of output pixels + row filter bytes
