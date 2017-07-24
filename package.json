@@ -1,0 +1,19 @@
+{
+  "name": "node-pnglib",
+  "version": "1.0.0",
+  "description": "Node.js version for PNGlib.",
+  "main": "pnglib.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lellansin/node-pnglib.git"
+  },
+  "author": "lellansin",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/Lellansin/node-pnglib/issues"
+  },
+  "homepage": "https://github.com/Lellansin/node-pnglib#readme"
+}
