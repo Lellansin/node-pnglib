@@ -1,7 +1,7 @@
 const fs = require('fs');
 const PNGlib = require('..');
 
-let png = new PNGlib({ width:150, height:50 });
+let png = new PNGlib(150, 50, 8);
 
 let lineIndex = png.index(0, 25);
 for (let i = 0; i < 75; i++) {

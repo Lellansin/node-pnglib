@@ -37,10 +37,10 @@ const CRC_TABLE = function () {
 
 class PNGlib {
   constructor (width, height, depth, bg) {
-    this.width   = width;
-    this.height  = height;
-    this.depth   = depth;
-    this.bg      = bg;
+    this.width  = width;
+    this.height = height;
+    this.depth  = depth || 8;
+    this.bg     = bg;
 
     // pixel data and row filter identifier size
     this.pix_size = height * (width + 1);
@@ -52,9 +52,9 @@ class PNGlib {
     this.ihdr_offs = 0;                               // IHDR offset and size
     this.ihdr_size = 4 + 4 + 13 + 4;
     this.plte_offs = this.ihdr_offs + this.ihdr_size; // PLTE offset and size
-    this.plte_size = 4 + 4 + 3 * depth + 4;
+    this.plte_size = 4 + 4 + 3 * this.depth + 4;
     this.trns_offs = this.plte_offs + this.plte_size; // tRNS offset and size
-    this.trns_size = 4 + 4 + depth + 4;
+    this.trns_size = 4 + 4 + this.depth + 4;
     this.idat_offs = this.trns_offs + this.trns_size; // IDAT offset and size
     this.idat_size = 4 + 4 + this.data_size + 4;
     this.iend_offs = this.idat_offs + this.idat_size; // IEND offset and size
