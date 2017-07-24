@@ -36,10 +36,11 @@ const CRC_TABLE = function () {
 }();
 
 class PNGlib {
-  constructor (width, height, depth) {
+  constructor (width, height, depth, bg) {
     this.width   = width;
     this.height  = height;
     this.depth   = depth;
+    this.bg      = bg;
 
     // pixel data and row filter identifier size
     this.pix_size = height * (width + 1);
@@ -86,6 +87,8 @@ class PNGlib {
       }
       write(this.buffer, this.idat_offs + 8 + 2 + (i << 16) + (i << 2), bits, byte2lsb(size), byte2lsb(~size));
     }
+
+    this.color(...(this.gb || [0,0,0,0]));
   }
 
   // compute the index into a png for a given pixel
@@ -113,6 +116,10 @@ class PNGlib {
       this.palette[color] = this.pindex++;
     }
     return this.palette[color];
+  }
+
+  setPixel(x, y, color) {
+    this.buffer[this.index(Math.floor(x), Math.floor(y))] = this.color(...color);
   }
 
   // output a PNG string, Base64 encoded
