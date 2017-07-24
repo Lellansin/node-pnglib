@@ -2,7 +2,7 @@
   "name": "node-pnglib",
   "version": "1.0.0",
   "description": "Node.js version for PNGlib.",
-  "main": "pnglib.js",
+  "main": "./lib/pnglib.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
