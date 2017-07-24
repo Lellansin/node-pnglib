@@ -1,4 +1,4 @@
-# node-pnglib [![NPM Version](https://badge.fury.io/js/node-pnglib.svg)](http://badge.fury.io/js/pnglib) [![Build Status](https://travis-ci.org/Lellansin/node-pnglib.png?branch=master)](https://travis-ci.org/Lellansin/node-pnglib) [![Coveralls Status](https://img.shields.io/coveralls/Lellansin/node-pnglib/master.svg)](https://coveralls.io/github/Lellansin/node-pnglib)
+# node-pnglib [![NPM Version](https://badge.fury.io/js/node-pnglib.svg)](http://badge.fury.io/js/node-pnglib) [![Build Status](https://travis-ci.org/Lellansin/node-pnglib.png?branch=master)](https://travis-ci.org/Lellansin/node-pnglib) [![Coveralls Status](https://img.shields.io/coveralls/Lellansin/node-pnglib/master.svg)](https://coveralls.io/github/Lellansin/node-pnglib)
 
 Pure Javascript lib for generate PNG, Node.js version for [PNGlib](http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript/).
 
