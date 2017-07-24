@@ -12,7 +12,7 @@ http.createServer(function (req, res) {
   var p = new pnglib(80, 30);
   var index = p.index(0, 15);
   for (var i = 0; i < 40; i++) {
-    p.buffer[index + i] = p.color('blue'); // paint (red, green, blue, alpha)
+    p.buffer[index + i] = p.color('blue');
   }
 
   res.setHeader('Content-Type', 'image/png');

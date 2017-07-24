@@ -64,7 +64,7 @@ class PNGlib {
     this.buffer_size  = this.iend_offs + this.iend_size;  // total PNG size
 
     this.buffer  = Buffer.alloc(this.buffer_size);
-    this.palette = {};
+    this.palette = new Map();
     this.pindex  = 0;
 
     // initialize non-zero elements
@@ -115,8 +115,11 @@ class PNGlib {
 
     const color = (((((alpha << 8) | red) << 8) | green) << 8) | blue;
 
-    if (typeof this.palette[color] == 'undefined') {
-      if (this.pindex == this.depth) return CODE_NUL;
+    if (!this.palette.has(color)) {
+      if (this.pindex == this.depth) {
+        console.warn('node-pnglib: depth is not enough, set up it for more');
+        return CODE_NUL;
+      }
 
       let ndx = this.plte_offs + 8 + 3 * this.pindex;
 
@@ -125,9 +128,9 @@ class PNGlib {
       this.buffer[ndx + 2] = blue;
       this.buffer[this.trns_offs + 8 + this.pindex] = alpha;
 
-      this.palette[color] = this.pindex++;
+      this.palette.set(color, this.pindex++);
     }
-    return this.palette[color];
+    return this.palette.get(color);
   }
 
   setPixel(x, y, color) {
