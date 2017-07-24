@@ -4,7 +4,7 @@ Pure Javascript lib for generate PNG, Node.js version for [PNGlib](http://www.xa
 
 ## Example
 
-Test it with http server:
+**Test it with http server:**
 
 ```javascript
 const http = require('http');
@@ -29,9 +29,10 @@ http.createServer(function (req, res) {
 ```
 
 Output:
+
 ![line](/example/line.png)
 
-Test with file:
+**Test with file:**
 
 ```javascript
 const fs = require('fs');
@@ -51,9 +52,10 @@ fs.writeFileSync('./block.png', png.getBuffer());
 ```
 
 Output:
+
 ![line](/example/block.png)
 
-Let's try to draw waves:
+**Let's try to draw waves:**
 
 ```javascript
 const http = require('http');
@@ -61,7 +63,6 @@ const PNGlib = require('node-pnglib');
 
 http.createServer(function (req, res) {
   if(req.url == '/favicon.ico') return res.end('');
-
 
   let p = new PNGlib(200, 150);
   
@@ -82,5 +83,6 @@ http.createServer(function (req, res) {
 ```
 
 Output:
-![line](/example/block.png)
+
+![line](/example/wave.png)
 

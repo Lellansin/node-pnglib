@@ -1,6 +1,6 @@
 {
   "name": "node-pnglib",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Pure Javascript lib for generate PNG.",
   "main": "./lib/pnglib.js",
   "scripts": {
