@@ -53,9 +53,3 @@ utils.crc32 = function (buf, offs, size) {
   }
   utils.write4(buf, offs + over, crc ^ -1);
 };
-
-utils.hexToBin = function (num) {
-  let str = Number(num, 16).toString(2);
-  let len = str.length;
-  return len < 8 ? ('0'.repeat(8 - len) + str) : str;
-};
