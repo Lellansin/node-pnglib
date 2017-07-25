@@ -1,21 +1,41 @@
 'use strict';
 
-var pnglib = require('./pnglib-master');
-var pnglibes6 = require('./pnglib-es6-master');
-var npnglib = require('./node-pnglib-current');;
+var pnglib = require('pnglib');
+var pnglibes6 = require('pnglib-es6').default;
+var npnglib = require('..');
 
 var Benchmark = require('benchmark');
-var suite = new Benchmark.Suite;
+var suite = new Benchmark().Suite;
 
 suite
   .add('pnglib', function() {
-    pnglib();
+    var p = new pnglib(150, 50, 8);
+    var lineIndex = p.index(0, 25);
+    p.color(0, 0, 0, 0);  // background
+    for (let i = 0; i < 75; i++)
+      p.buffer[lineIndex + i]= p.color(255, 0, 255, 255); // Second color: paint (red, green, blue, alpha)
+
+    // p.getBuffer();
+    p.getDump();
   })
   .add('pnglib-es6', function() {
-    pnglibes6();
+    const image = new pnglibes6(150, 50, 8);
+
+    var lineIndex = image.index(0, 25);
+    for (let i = 0; i < 75; i++)
+      image.buffer[lineIndex + i]= image.createColor('#FF00FF'); // Second color: paint (red, green, blue, alpha)
+
+    image.deflate();
+    new Buffer(image.buffer.buffer);
   })
   .add('node-pnglib', function() {
-    npnglib();
+    let png = new npnglib(150, 50);
+    let lineIndex = png.index(0, 25);
+    for (let i = 0; i < 75; i++) {
+      png.buffer[lineIndex + i] = png.color('#F0F');
+    }
+
+    png.getBuffer();
   })
   .on('cycle', function(event) {
     console.log(String(event.target));
