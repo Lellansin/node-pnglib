@@ -166,15 +166,14 @@ class PNGlib {
     let n = NMAX;
     
     let index = this.index(-1, 0);
-    for (let y = 0; y < this.height; ++y) {
-      for (let x = -1; x < this.width; ++x) {
-        s1 += this.buffer[index++];
-        s2 += s1;
-        if ((n -= 1) === 0) {
-          s1 %= BASE;
-          s2 %= BASE;
-          n = NMAX;
-        }
+    let count = this.height * (this.width + 1);
+    for (let i = 0; i < count; ++i) {
+      s1 += this.buffer[index++];
+      s2 += s1;
+      if ((n -= 1) === 0) {
+        s1 %= BASE;
+        s2 %= BASE;
+        n = NMAX;
       }
     }
     s1 %= BASE;
