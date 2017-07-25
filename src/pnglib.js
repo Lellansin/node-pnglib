@@ -2,7 +2,7 @@
 
 import BUF from './buf';
 import RGBA from './rgba';
-import utils from './utils';
+import * from './utils';
 import font from './font';
 
 class PNGlib {
@@ -37,29 +37,29 @@ class PNGlib {
     this.pindex  = 0;
 
     // initialize non-zero elements
-    utils.write4(this.buffer, this.ihdr_offs, this.ihdr_size - 12);
-    utils.writeb(this.buffer, this.ihdr_offs + 4, BUF.PNG_IHDR);
-    utils.write4(this.buffer, this.ihdr_offs + 4*2, this.width);
-    utils.write4(this.buffer, this.ihdr_offs + 4*3, this.height);
-    utils.writeb(this.buffer, this.ihdr_offs + 4*4, BUF.CODE_X08X03);
+    write4(this.buffer, this.ihdr_offs, this.ihdr_size - 12);
+    writeb(this.buffer, this.ihdr_offs + 4, BUF.PNG_IHDR);
+    write4(this.buffer, this.ihdr_offs + 4*2, this.width);
+    write4(this.buffer, this.ihdr_offs + 4*3, this.height);
+    writeb(this.buffer, this.ihdr_offs + 4*4, BUF.CODE_X08X03);
 
-    utils.write4(this.buffer, this.plte_offs, this.plte_size - 12);
-    utils.writeb(this.buffer, this.plte_offs + 4, BUF.PNG_PLTE);
+    write4(this.buffer, this.plte_offs, this.plte_size - 12);
+    writeb(this.buffer, this.plte_offs + 4, BUF.PNG_PLTE);
 
-    utils.write4(this.buffer, this.trns_offs, this.trns_size - 12);
-    utils.writeb(this.buffer, this.trns_offs + 4, BUF.PNG_tRNS);
+    write4(this.buffer, this.trns_offs, this.trns_size - 12);
+    writeb(this.buffer, this.trns_offs + 4, BUF.PNG_tRNS);
  
-    utils.write4(this.buffer, this.idat_offs, this.idat_size - 12);
-    utils.writeb(this.buffer, this.idat_offs + 4, BUF.PNG_IDAT);
+    write4(this.buffer, this.idat_offs, this.idat_size - 12);
+    writeb(this.buffer, this.idat_offs + 4, BUF.PNG_IDAT);
 
-    utils.write4(this.buffer, this.iend_offs, this.iend_size - 12);
-    utils.writeb(this.buffer, this.iend_offs + 4, BUF.PNG_IEND);
+    write4(this.buffer, this.iend_offs, this.iend_size - 12);
+    writeb(this.buffer, this.iend_offs + 4, BUF.PNG_IEND);
 
     // initialize png file header
-    utils.writeb(this.raw, 0, BUF.PNG_HEAD);
+    writeb(this.raw, 0, BUF.PNG_HEAD);
 
     // initialize deflate header
-    utils.write2(this.buffer, this.idat_offs + 8, BUF.PNG_DEFLATE_HEADER);
+    write2(this.buffer, this.idat_offs + 8, BUF.PNG_DEFLATE_HEADER);
 
     // initialize deflate block headers
     for (let i = 0; (i << 16) - 1 < this.pix_size; ++i) {
@@ -72,9 +72,9 @@ class PNGlib {
         bits = BUF.CODE_SOH;
       }
       let offs = this.idat_offs + 8 + 2 + (i << 16) + (i << 2);
-      offs = utils.writeb(this.buffer, offs, bits);
-      offs = utils.write2lsb(this.buffer, offs, size);
-      utils.write2lsb(this.buffer, offs, ~size);
+      offs = writeb(this.buffer, offs, bits);
+      offs = write2lsb(this.buffer, offs, size);
+      write2lsb(this.buffer, offs, ~size);
     }
 
     if (this.bg) this.color(this.bg);
@@ -126,8 +126,8 @@ class PNGlib {
       let l = Math.ceil(w / 8);
 
       for (let i = 0, len = font.h; i < len; ++i) {
-        let prevByteStr = utils.hexToBin(fontData[l * i]);
-        let nextByteStr = utils.hexToBin(fontData[l * i + 1]);
+        let prevByteStr = hexToBin(fontData[l * i]);
+        let nextByteStr = hexToBin(fontData[l * i + 1]);
         let line = (prevByteStr + nextByteStr).substr(0, w);
 
         for (let ci = 0, lineLen = line.length; ci < lineLen; ++ci) {
@@ -179,14 +179,14 @@ class PNGlib {
     s1 %= BASE;
     s2 %= BASE;
     let offset = this.idat_offs + this.idat_size - 8;
-    utils.write4(this.buffer, offset, (s2 << 16) | s1);
+    write4(this.buffer, offset, (s2 << 16) | s1);
 
     // compute crc32 of the PNG chunks
-    utils.crc32(this.buffer, this.ihdr_offs, this.ihdr_size);
-    utils.crc32(this.buffer, this.plte_offs, this.plte_size);
-    utils.crc32(this.buffer, this.trns_offs, this.trns_size);
-    utils.crc32(this.buffer, this.idat_offs, this.idat_size);
-    utils.crc32(this.buffer, this.iend_offs, this.iend_size);
+    crc32(this.buffer, this.ihdr_offs, this.ihdr_size);
+    crc32(this.buffer, this.plte_offs, this.plte_size);
+    crc32(this.buffer, this.trns_offs, this.trns_size);
+    crc32(this.buffer, this.idat_offs, this.idat_size);
+    crc32(this.buffer, this.iend_offs, this.iend_size);
 
     if (Buffer.isBuffer(this.raw)) return this.raw;
     else return new Buffer(this.raw);
