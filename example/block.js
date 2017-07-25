@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const PNGlib = require('..');
 
 let png = new PNGlib(200, 200);
@@ -13,4 +14,4 @@ for (let i = 30; i < 120; i++) {
   }
 }
 
-fs.writeFileSync('./block.png', png.getBuffer());
+fs.writeFileSync(path.resolve(__dirname, './block.png'), png.getBuffer());
