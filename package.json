@@ -1,7 +1,7 @@
 {
   "name": "node-pnglib",
-  "version": "1.3.0",
-  "description": "Pure Javascript lib for generate PNG.",
+  "version": "1.4.0",
+  "description": "Pure Javascript lib for generate PNG with backend Node.js.",
   "main": "./lib/pnglib.js",
   "engines": {
     "node": ">=4.4.0"
@@ -20,7 +20,8 @@
   "keywords": [
     "pictrue",
     "png",
-    "pnglib"
+    "pnglib",
+    "backend"
   ],
   "author": "lellansin",
   "license": "BSD-2-Clause",
