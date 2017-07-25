@@ -46,10 +46,16 @@ utils.writeb = function (buf, offs, bytes) {
   return offs;
 };
 
-utils.crc32 = function crc32(buf, offs, size) {
+utils.crc32 = function (buf, offs, size) {
   let crc = -1, over = size - 4;
   for (let i = 4; i < over; ++i) {
     crc = CRC_TABLE[(crc ^ buf[offs + i]) & 0xff] ^ (crc >>> 8);
   }
   utils.write4(buf, offs + over, crc ^ -1);
+};
+
+utils.hexToBin = function (num) {
+  let str = Number(num, 16).toString(2);
+  let len = str.length;
+  return len < 8 ? ('0'.repeat(8 - len) + str) : str;
 };

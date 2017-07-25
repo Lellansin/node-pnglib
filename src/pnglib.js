@@ -3,6 +3,7 @@
 import BUF from './buf';
 import RGBA from './rgba';
 import utils from './utils';
+import font from './font';
 
 class PNGlib {
   constructor (w, h, d, bg) {
@@ -115,6 +116,30 @@ class PNGlib {
     return this.palette.get(color);
   }
 
+  drawChar(ch, x = 0, y = 0, font = font.font8x16, color = '#ff0000') {
+    let idx = font.fonts.indexOf(ch);
+
+    if (idx >= 0) {
+      let fontData = font.data[idx];
+      let w = font.w;
+      let y0 = y;
+      let l = Math.ceil(w / 8);
+
+      for (let i = 0, len = font.h; i < len; ++i) {
+        let prevByteStr = utils.hexToBin(fontData[l * i]);
+        let nextByteStr = utils.hexToBin(fontData[l * i + 1]);
+        let line = (prevByteStr + nextByteStr).substr(0, w);
+
+        for (let ci = 0, lineLen = line.length; ci < lineLen; ++ci) {
+          if (line[ci] === '1') {
+            this.setPixel(x + ci, y0, color); 
+          }
+        }
+        ++y0;
+      }
+    }
+  }
+
   setPixel(x, y, rgba) {
     if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
     this.buffer[this.index(Math.floor(x), Math.floor(y))] = this.color(rgba);
@@ -169,3 +194,6 @@ class PNGlib {
 }
 
 module.exports = PNGlib;
+module.exports.font8x16 = font.font8x16;
+module.exports.font12x24 = font.font12x24;
+module.exports.font16x32 = font.font16x32;
