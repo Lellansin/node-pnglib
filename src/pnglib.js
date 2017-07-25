@@ -91,12 +91,9 @@ class PNGlib {
   color(red, green, blue, alpha) {
     if (typeof red == 'string') {
       let rgba = RGBA(red);
-      if (!rgba) {
-        throw new Error(`invalid color ${rgba}`);
-      }
+      if (!rgba) throw new Error(`invalid color ${rgba}`);
       [red, green, blue, alpha] = rgba;
-    }
-    else {
+    } else {
       alpha = alpha >= 0 ? alpha : 255;
     }
 
@@ -109,12 +106,10 @@ class PNGlib {
       }
 
       let ndx = this.plte_offs + 8 + 3 * this.pindex;
-
-      this.buffer[ndx + 0] = red;
-      this.buffer[ndx + 1] = green;
-      this.buffer[ndx + 2] = blue;
+      this.buffer[ndx++] = red;
+      this.buffer[ndx++] = green;
+      this.buffer[ndx++] = blue;
       this.buffer[this.trns_offs + 8 + this.pindex] = alpha;
-
       this.palette.set(color, this.pindex++);
     }
     return this.palette.get(color);

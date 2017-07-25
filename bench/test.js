@@ -5,7 +5,7 @@ var pnglibes6 = require('pnglib-es6').default;
 var npnglib = require('..');
 
 var Benchmark = require('benchmark');
-var suite = new Benchmark().Suite;
+var suite = new Benchmark.Suite();
 
 suite
   .add('pnglib', function() {
