@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const PNGlib = require('..');
 
 // width 150, height 50
@@ -13,4 +14,4 @@ for (let i = 0; i < 75; i++) {
   png.buffer[lineIndex + i] = png.color('blue'); // paint (red, green, blue, alpha)
 }
 
-fs.writeFileSync('line.png', png.getBuffer());
+fs.writeFileSync(path.resolve(__dirname, './line.png'), png.getBuffer());
