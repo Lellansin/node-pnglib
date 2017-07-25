@@ -14,7 +14,11 @@ if (MAJOR > 5) {
   exports.PNG_IEND = Buffer.from('IEND', ENCODING);
   exports.PNG_HEAD = Buffer.from('\x89PNG\r\n\x1a\n', ENCODING);
   exports.alloc = (size) => Buffer.alloc(size);
+  exports.view = function (raw, len, size) {
+    return Buffer.from(raw.buffer, len, size);
+  };
 } else {
+  let rawBuffer;
   exports.CODE_NUL = new Buffer('\x00', ENCODING);
   exports.CODE_SOH = new Buffer('\x01', ENCODING);
   exports.CODE_X08X03 = new Buffer('\x08\x03', ENCODING);
@@ -24,7 +28,13 @@ if (MAJOR > 5) {
   exports.PNG_IDAT = new Buffer('IDAT', ENCODING);
   exports.PNG_IEND = new Buffer('IEND', ENCODING);
   exports.PNG_HEAD = new Buffer('\x89PNG\r\n\x1a\n', ENCODING);
-  exports.alloc = (size) => new Buffer(Array(size).fill(0));
+  exports.alloc = function (size) {
+    rawBuffer = new ArrayBuffer(size);
+    return new Uint8Array(rawBuffer).fill(0);
+  };
+  exports.view = function (raw, len, size) {
+    return new Uint8Array(rawBuffer, len, size);
+  };
 }
 
 // deflate header

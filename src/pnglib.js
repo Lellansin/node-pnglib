@@ -30,8 +30,8 @@ class PNGlib {
     this.iend_size = 4 + 4 + 4;
     this.buffer_size  = this.iend_offs + this.iend_size;  // total PNG size
 
-    this.raw     = BUF.alloc(BUF.PNG_HEAD.length + this.buffer_size);
-    this.buffer  = Buffer.from(this.raw.buffer, BUF.PNG_HEAD.length, this.buffer_size);
+    this.raw = BUF.alloc(BUF.PNG_HEAD.length + this.buffer_size);
+    this.buffer = BUF.view(this.raw, BUF.PNG_HEAD.length, this.buffer_size);
     this.palette = new Map();
     this.pindex  = 0;
 
@@ -173,7 +173,8 @@ class PNGlib {
     utils.crc32(this.buffer, this.idat_offs, this.idat_size);
     utils.crc32(this.buffer, this.iend_offs, this.iend_size);
 
-    return this.raw;
+    if (Buffer.isBuffer(this.raw)) return this.raw;
+    else return new Buffer(this.raw);
   }
 }
 
