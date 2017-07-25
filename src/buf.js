@@ -14,7 +14,7 @@ if (MAJOR > 5) {
   exports.PNG_IEND = Buffer.from('IEND', ENCODING);
   exports.PNG_HEAD = Buffer.from('\x89PNG\r\n\x1a\n', ENCODING);
   exports.alloc = (size) => Buffer.alloc(size);
-  exports.view = function (raw, len, size) {
+  exports.view = (raw, len, size) => {
     return Buffer.from(raw.buffer, len, size);
   };
 } else {
@@ -28,11 +28,11 @@ if (MAJOR > 5) {
   exports.PNG_IDAT = new Buffer('IDAT', ENCODING);
   exports.PNG_IEND = new Buffer('IEND', ENCODING);
   exports.PNG_HEAD = new Buffer('\x89PNG\r\n\x1a\n', ENCODING);
-  exports.alloc = function (size) {
+  exports.alloc = (size) => {
     rawBuffer = new ArrayBuffer(size);
     return new Uint8Array(rawBuffer).fill(0);
   };
-  exports.view = function (raw, len, size) {
+  exports.view = (raw, len, size) => {
     return new Uint8Array(rawBuffer, len, size);
   };
 }
@@ -43,5 +43,3 @@ exports.PNG_DEFLATE_HEADER = function() {
   header += 31 - (header % 31);
   return header;
 }();
-
-

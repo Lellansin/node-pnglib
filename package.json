@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "babel src/ -d lib/",
+    "dev": "babel src/ --watch -d lib/",
     "benchmark": "node bench/test",
     "test": "mocha --reporter spec",
     "coveralls": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"

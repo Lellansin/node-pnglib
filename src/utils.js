@@ -1,14 +1,13 @@
 'use strict';
 
-const MAJOR = process.version.split('.')[0].slice(1);
 const utils = exports;
 
 // Create crc32 lookup table
 const CRC_TABLE = function () {
-  let _crc32 = new Array();
-  for (let i = 0; i < 256; i++) {
+  let _crc32 = Array(256);
+  for (let i = 0; i < 256; ++i) {
     let c = i;
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < 8; ++j) {
       if (c & 1) {
         c = -306674912 ^ ((c >> 1) & 0x7fffffff);
       } else {
@@ -41,7 +40,7 @@ utils.write2lsb = function (buf, offs, w) {
 };
 
 utils.writeb = function (buf, offs, bytes) {
-  for (let i = 0, len = bytes.length; i < len; i++) {
+  for (let i = 0, len = bytes.length; i < len; ++i) {
     buf[offs++] = bytes[i];
   }
   return offs;
@@ -49,15 +48,8 @@ utils.writeb = function (buf, offs, bytes) {
 
 utils.crc32 = function crc32(buf, offs, size) {
   let crc = -1, over = size - 4;
-  for (let i = 4; i < over; i += 1) {
+  for (let i = 4; i < over; ++i) {
     crc = CRC_TABLE[(crc ^ buf[offs + i]) & 0xff] ^ (crc >>> 8);
   }
   utils.write4(buf, offs + over, crc ^ -1);
-};
-
-const getBuf = function(dat) {
-  if (MAJOR < 6) {
-    return new Buffer(dat, 'ascii');
-  }
-  return Buffer.from(dat, 'ascii');
 };

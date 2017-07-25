@@ -99,4 +99,4 @@ MacBook Pro (Retina, 13-inch, Early 2015)
 2.7 GHz Intel Core i5
 ```
 
-It's much faster than orginal version.
+It's much faster than similar libraries. you can go to [here](https://github.com/Lellansin/node-pnglib/blob/master/bench/) for more benchmark infomation.

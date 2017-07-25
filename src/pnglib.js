@@ -1,8 +1,8 @@
 'use strict';
 
-const BUF = require('./buf');
-const RGBA = require('./rgba');
-const utils = require('./utils');
+import BUF from './buf';
+import RGBA from './rgba';
+import utils from './utils';
 
 class PNGlib {
   constructor (w, h, d, bg) {
@@ -61,7 +61,7 @@ class PNGlib {
     utils.write2(this.buffer, this.idat_offs + 8, BUF.PNG_DEFLATE_HEADER);
 
     // initialize deflate block headers
-    for (let i = 0; (i << 16) - 1 < this.pix_size; i++) {
+    for (let i = 0; (i << 16) - 1 < this.pix_size; ++i) {
       let size, bits;
       if (i + 0xffff < this.pix_size) {
         size = 0xffff;
@@ -83,8 +83,8 @@ class PNGlib {
   // compute the index into a png for a given pixel
   index(x, y) {
     let i = y * (this.width + 1) + x + 1;
-    let j = this.idat_offs + 8 + 2 + 5 * Math.floor((i / 0xffff) + 1) + i;
-    return j;
+    let offset = this.idat_offs + 8 + 2 + 5;
+    return offset * Math.floor(i / 0xffff + 1) + i;
   }
 
   // convert a color and build up the palette
@@ -94,10 +94,7 @@ class PNGlib {
       if (!rgba) {
         throw new Error(`invalid color ${rgba}`);
       }
-      red = rgba[0];
-      green = rgba[1];
-      blue = rgba[2];
-      alpha = rgba[3];
+      [red, green, blue, alpha] = rgba;
     }
     else {
       alpha = alpha >= 0 ? alpha : 255;
@@ -147,14 +144,12 @@ class PNGlib {
     let s1 = 1;
     let s2 = 0;
     let n = NMAX;
-
-    var baseOffset = this.idat_offs + 8 + 2 + 5;
-    for (var y = 0; y < this.height; y++) {
-      for (var x = -1; x < this.width; x++) {
-        var _i3 = y * (this.width + 1) + x + 1;
-        s1 += this.buffer[baseOffset * Math.floor(_i3 / 0xffff + 1) + _i3];
+    
+    for (let y = 0; y < this.height; ++y) {
+      for (let x = -1; x < this.width; ++x) {
+        s1 += this.buffer[this.index(x, y)];
         s2 += s1;
-        if ((n -= 1) == 0) {
+        if ((n -= 1) === 0) {
           s1 %= BASE;
           s2 %= BASE;
           n = NMAX;
