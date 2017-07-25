@@ -7,6 +7,8 @@
     "node": ">=4.4.0"
   },
   "scripts": {
+    "build": "babel src/ -d lib/",
+    "benchmark": "node bench/test",
     "test": "mocha --reporter spec",
     "coveralls": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
@@ -26,6 +28,9 @@
   },
   "homepage": "https://github.com/Lellansin/node-pnglib#readme",
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "benchmark": "^2.1.4",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
