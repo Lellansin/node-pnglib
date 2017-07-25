@@ -30,6 +30,8 @@
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
+    "pnglib": "0.0.1",
+    "pnglib-es6": "^1.0.1",
     "should": "^11.2.1"
   },
   "dependencies": {
