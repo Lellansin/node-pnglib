@@ -48,9 +48,9 @@ suite
 /*
 node v8.1.1
 
-pnglib x 1,090 ops/sec ±2.04% (84 runs sampled)
-pnglib-es6 x 3,726 ops/sec ±1.54% (84 runs sampled)
-node-pnglib x 8,514 ops/sec ±1.01% (84 runs sampled)
+pnglib x 1,165 ops/sec ±2.82% (84 runs sampled)
+pnglib-es6 x 3,705 ops/sec ±4.48% (75 runs sampled)
+node-pnglib x 10,001 ops/sec ±1.32% (87 runs sampled)
 Fastest is node-pnglib
 
 node v4.4.0
