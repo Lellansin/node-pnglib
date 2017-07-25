@@ -11,5 +11,5 @@ module.exports = () => {
     p.buffer[lineIndex + i]= p.color(255, 0, 255, 255); // Second color: paint (red, green, blue, alpha)
 
   // p.getBuffer();
-  // p.getDump();
+  p.getDump();
 };

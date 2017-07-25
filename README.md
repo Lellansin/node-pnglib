@@ -86,3 +86,17 @@ Output:
 
 ![line](/example/wave.png)
 
+# Benchmark
+
+```
+pnglib x 1,090 ops/sec ±2.04% (84 runs sampled)
+pnglib-es6 x 3,726 ops/sec ±1.54% (84 runs sampled)
+node-pnglib x 8,514 ops/sec ±1.01% (84 runs sampled)
+Fastest is node-pnglib
+
+node v8.1.1
+MacBook Pro (Retina, 13-inch, Early 2015)
+2.7 GHz Intel Core i5
+```
+
+It's much faster than orginal version.

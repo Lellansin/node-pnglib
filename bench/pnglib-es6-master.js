@@ -10,6 +10,6 @@ module.exports = () => {
   for (let i = 0; i < 75; i++)
     image.buffer[lineIndex + i]= image.createColor('#FF00FF'); // Second color: paint (red, green, blue, alpha)
 
-  // image.deflate();
-  // Buffer.from(image.buffer.buffer);
+  image.deflate();
+  new Buffer(image.buffer.buffer);
 };

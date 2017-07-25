@@ -9,6 +9,5 @@ module.exports = () => {
     png.buffer[lineIndex + i] = png.color('#F0F');
   }
 
-  // png.deflate();
-  // png.getBuffer();
+  png.getBuffer();
 };
