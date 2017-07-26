@@ -114,9 +114,11 @@ Output:
 # Benchmark
 
 ```
-pnglib x 1,165 ops/sec ±2.82% (84 runs sampled)
-pnglib-es6 x 3,705 ops/sec ±4.48% (75 runs sampled)
-node-pnglib x 10,001 ops/sec ±1.32% (87 runs sampled)
+# Simple line
+
+pnglib x 1,209 ops/sec ±1.26% (86 runs sampled)
+pnglib-es6 x 3,695 ops/sec ±3.37% (84 runs sampled)
+node-pnglib x 11,466 ops/sec ±1.43% (87 runs sampled)
 Fastest is node-pnglib
 
 node v8.1.1
