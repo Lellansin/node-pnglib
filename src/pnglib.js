@@ -217,6 +217,7 @@ class PNGlib {
 }
 
 module.exports = PNGlib;
+module.exports.RGBA = RGBA;
 module.exports.font8x16 = font.font8x16;
 module.exports.font12x24 = font.font12x24;
 module.exports.font16x32 = font.font16x32;
