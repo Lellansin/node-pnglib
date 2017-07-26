@@ -103,7 +103,7 @@ class PNGlib {
     if (!this.palette.has(color)) {
       if (this.pindex == this.depth) {
         console.warn('node-pnglib: depth is not enough, set up it for more');
-        return BUF.CODE_NUL;
+        return BUF.CODE_NUL; // TODO return value (not buffer)
       }
 
       let ndx = this.plte_offs + 8 + 3 * this.pindex;
@@ -116,7 +116,9 @@ class PNGlib {
     return this.palette.get(color);
   }
 
+  // To be deprecated
   drawChar(ch, x = 0, y = 0, font = font.font8x16, color = '#ff0000') {
+    console.warn('#drawChar method is going to be deprecated');
     let idx = font.fonts.indexOf(ch);
 
     if (idx >= 0) {
