@@ -120,6 +120,12 @@ class PNGlib {
     let idx = font.fonts.indexOf(ch);
 
     if (idx >= 0) {
+      let rgba = color;
+      // 预解析颜色，避免在setPixel中进行频繁的解析操作
+      if (typeof color === 'string') {
+        rgba = RGBA(color);
+      }
+
       let fontData = font.data[idx];
       let w = font.w;
       let y0 = y;
@@ -140,7 +146,7 @@ class PNGlib {
           for (let bitPos = width - 1; bitPos >= 0; --bitPos) {
             mask = 1 << bitPos;
             if ((d & mask) === mask) {
-              this.setPixel(x + x0 + (8 - bitPos), y0, color);
+              this.setPixel(x + x0 + (8 - bitPos), y0, rgba);
             }
           }
         }
@@ -151,7 +157,15 @@ class PNGlib {
 
   setPixel(x, y, rgba) {
     if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
-    this.buffer[this.index(x | 0, y | 0)] = this.color(rgba);
+
+    let color;
+    if (Array.isArray(rgba)) {
+      color = this.color(...rgba);
+    } else {
+      color = this.color(rgba);
+    }
+
+    this.buffer[this.index(x | 0, y | 0)] = color;
   }
 
   // output a PNG string, Base64 encoded
