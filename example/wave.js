@@ -15,6 +15,8 @@ for (let i = 0, num = 200 / 10; i <= num; i += .01) {
   // use a color triad of Microsofts million dollar color
   png.setPixel(x, (y), '#FF00FF');
   png.setPixel(x, (y + 10), 'rgb(255,0,0)');
+  // [red, green, blue, alpha] = [100, 200, 100, 100]
+  png.setPixel(x, (y + 20), [100, 200, 100, 100])
 }
 
 fs.writeFileSync(path.resolve(__dirname, './wave.png'), png.getBuffer());

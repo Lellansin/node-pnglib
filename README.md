@@ -36,6 +36,7 @@ Output:
 
 ```javascript
 const fs = require('fs');
+const path = require('path');
 const PNGlib = require('node-pnglib');
 
 let png = new PNGlib(200, 200);
@@ -48,7 +49,7 @@ for (let i = 30; i < 120; i++) {
   }
 }
 
-fs.writeFileSync('./block.png', png.getBuffer());
+fs.writeFileSync(path.resolve(__dirname, './block.png'), png.getBuffer());
 ```
 
 Output:
@@ -58,28 +59,28 @@ Output:
 **Let's try to draw waves:**
 
 ```javascript
-const http = require('http');
-const PNGlib = require('node-pnglib');
+'use strict';
 
-http.createServer(function (req, res) {
-  if(req.url == '/favicon.ico') return res.end('');
+const fs = require('fs');
+const path = require('path');
+const PNGlib = require('..');
 
-  let png = new PNGlib(200, 150);
-  
-  for (let i = 0, num = 200 / 10; i <= num; i += .01) {
-  
-    let x = i * 10;
-    // Math.sin(i) range [-1, 1] ====> 0 <= y <= 50
-    let y = Math.sin(i) * 25 + 25;
-  
-    // use a color triad of Microsofts million dollar color
-    png.setPixel(x, (y)     , '#FF00FF');
-    png.setPixel(x, (y + 10), 'rgb(255,0,0)');
-  }
+let png = new PNGlib(200, 150);
 
-  res.setHeader('Content-Type', 'image/png');
-  res.end(png.getBuffer());
-}).listen(3001);
+for (let i = 0, num = 200 / 10; i <= num; i += .01) {
+
+  let x = i * 10;
+  // Math.sin(i) range [-1, 1] ====> 0 <= y <= 50
+  let y = Math.sin(i) * 25 + 25;
+
+  // use a color triad of Microsofts million dollar color
+  png.setPixel(x, (y), '#FF00FF');
+  png.setPixel(x, (y + 10), 'rgb(255,0,0)');
+  // [red, green, blue, alpha] = [100, 200, 100, 100]
+  png.setPixel(x, (y + 20), [100, 200, 100, 100])
+}
+
+fs.writeFileSync(path.resolve(__dirname, './wave.png'), png.getBuffer());
 ```
 
 Output:
@@ -101,7 +102,8 @@ for (let i = 0; i < 10; ++i) {
   const font = PNGlib.font8x16;
   let ch = String(i);
   console.log(ch);
-  png.drawChar(ch, 0 + 2 * i * font.w, 50, font, '#00FF00');
+  // png.drawChar(ch, 0 + 2 * i * font.w, 50, font, '#00FF00');
+  png.drawChar(ch, 0 + 2 * i * font.w, 50, font, [0, 255, 0, 100]);
 }
 
 fs.writeFileSync(path.resolve(__dirname, './char.png'), png.getBuffer());
