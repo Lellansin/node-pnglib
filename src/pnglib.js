@@ -6,10 +6,10 @@ import * as color from './color';
 
 module.exports = class PNGlib {
   constructor (w, h, d, bg) {
-    this.width  = w;
-    this.height = h;
-    this.depth  = d || 8;
-    this.bgColor     = bg;
+    this.width   = w;
+    this.height  = h;
+    this.depth   = d || 8;
+    this.bgColor = bg;
 
     // pixel data and row filter identifier size
     this.pix_size = this.height * (this.width + 1);
