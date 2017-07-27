@@ -111,9 +111,9 @@ Output:
 ```
 # Simple line
 
-pnglib x 1,209 ops/sec ±1.26% (86 runs sampled)
-pnglib-es6 x 3,695 ops/sec ±3.37% (84 runs sampled)
-node-pnglib x 11,466 ops/sec ±1.43% (87 runs sampled)
+pnglib x 1,021 ops/sec ±3.37% (76 runs sampled)
+pnglib-es6 x 3,293 ops/sec ±4.79% (79 runs sampled)
+node-pnglib x 17,027 ops/sec ±0.93% (87 runs sampled)
 Fastest is node-pnglib
 
 node v8.1.1
