@@ -77,7 +77,7 @@ module.exports = class PNGlib {
     }
 
     if (this.bgColor) this.setBgColor(this.bgColor);
-    else this.setBgColor(0, 0, 0, 0);
+    else this.setBgColor([0, 0, 0, 0]);
   }
 
   // compute the index into a png for a given pixel
@@ -88,7 +88,7 @@ module.exports = class PNGlib {
   }
 
   // convert a color and build up the palette
-  color(...args) {
+  color(args) {
     const rgba = color.getRGBA(args);
     if (!this.palette.has(rgba)) {
       return color.addColor(this, rgba);
@@ -96,7 +96,7 @@ module.exports = class PNGlib {
     return this.palette.get(rgba);
   }
 
-  setBgColor(...args) {
+  setBgColor(args) {
     const rgba = color.getRGBA(args);
     return color.setBgColor(this, rgba);
   }
