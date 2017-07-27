@@ -2,6 +2,12 @@
 
 Pure Javascript lib for generate PNG, Node.js version for [PNGlib](http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript/).
 
+## Installation
+
+```
+npm install node-pnglib
+```
+
 ## Example
 
 **Test it with http server:**
