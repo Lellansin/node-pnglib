@@ -5,8 +5,8 @@ import RGBA from './rgba';
 const CACHE = new Map();
 
 export function getRGBA(args) {
-  if (typeof args[0] == 'string') {
-    let str = args[0];
+  if (typeof args == 'string') {
+    let str = args;
     if (CACHE.get(str)) {
       return CACHE.get(str);
     }
