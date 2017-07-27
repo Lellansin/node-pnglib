@@ -48,15 +48,15 @@ suite
 /*
 node v8.1.1
 
-pnglib x 1,165 ops/sec ±2.82% (84 runs sampled)
-pnglib-es6 x 3,705 ops/sec ±4.48% (75 runs sampled)
-node-pnglib x 10,001 ops/sec ±1.32% (87 runs sampled)
+pnglib x 1,021 ops/sec ±3.37% (76 runs sampled)
+pnglib-es6 x 3,293 ops/sec ±4.79% (79 runs sampled)
+node-pnglib x 17,027 ops/sec ±0.93% (87 runs sampled)
 Fastest is node-pnglib
 
 node v4.4.0
 
-pnglib x 1,229 ops/sec ±5.92% (69 runs sampled)
-pnglib-es6 x 3,043 ops/sec ±4.31% (72 runs sampled)
-node-pnglib x 5,625 ops/sec ±1.94% (81 runs sampled)
+pnglib x 1,416 ops/sec ±5.59% (69 runs sampled)
+pnglib-es6 x 3,277 ops/sec ±1.62% (84 runs sampled)
+node-pnglib x 7,476 ops/sec ±2.49% (73 runs sampled)
 Fastest is node-pnglib
 */

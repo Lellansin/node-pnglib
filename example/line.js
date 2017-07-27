@@ -4,14 +4,14 @@ const fs = require('fs');
 const path = require('path');
 const PNGlib = require('..');
 
-// width 150, height 50
-let png = new PNGlib(150, 50);
+// width 100, height 40
+let png = new PNGlib(100, 40);
 
-// from (0, 25)
-let lineIndex = png.index(0, 25);
-for (let i = 0; i < 75; i++) {
+// from (0, 20)
+let lineIndex = png.index(0, 20);
+for (let i = 0; i < 100; i++) {
   // draw a line to (0, 75)
-  png.buffer[lineIndex + i] = png.color('blue'); // paint (red, green, blue, alpha)
+  png.buffer[lineIndex + i] = png.color('blue');
 }
 
 fs.writeFileSync(path.resolve(__dirname, './line.png'), png.getBuffer());

@@ -13,12 +13,12 @@ const PNGlib = require('node-pnglib');
 http.createServer(function (req, res) {
   if(req.url == '/favicon.ico') return res.end('');
 
-  // width 150, height 50
-  let png = new PNGlib(150, 50);
-  
-  // from (0, 25)
-  let lineIndex = png.index(0, 25);
-  for (let i = 0; i < 75; i++) {
+  // width 100, height 40
+  let png = new PNGlib(100, 40);
+
+  // from (0, 20)
+  let lineIndex = png.index(0, 20);
+  for (let i = 0; i < 100; i++) {
     // draw a line to (0, 75)
     png.buffer[lineIndex + i] = png.color('blue');
   }
@@ -38,13 +38,12 @@ Output:
 const fs = require('fs');
 const PNGlib = require('node-pnglib');
 
-let png = new PNGlib(200, 200);
-
-for (let i = 30; i < 120; i++) {
-  for (let j = 30; j < 120; j++) {
-    png.setPixel(i + 20, j + 35, '#cc0044');
-    png.setPixel(i + 30, j + 20, '#0044cc');
-    png.setPixel(i + 40, j + 30, '#00cc44');
+let png = new PNGlib(150, 150);
+for (let i = 20; i < 100; i++) {
+  for (let j = 20; j < 100; j++) {
+    png.setPixel(i + 10, j + 25, '#cc0044');
+    png.setPixel(i + 20, j + 10, '#0044cc');
+    png.setPixel(i + 30, j, '#00cc44');
   }
 }
 
@@ -64,19 +63,15 @@ const PNGlib = require('node-pnglib');
 http.createServer(function (req, res) {
   if(req.url == '/favicon.ico') return res.end('');
 
-  let png = new PNGlib(200, 150);
-  
-  for (let i = 0, num = 200 / 10; i <= num; i += .01) {
-  
-    let x = i * 10;
-    // Math.sin(i) range [-1, 1] ====> 0 <= y <= 50
-    let y = Math.sin(i) * 25 + 25;
-  
-    // use a color triad of Microsofts million dollar color
-    png.setPixel(x, (y)     , '#FF00FF');
-    png.setPixel(x, (y + 10), 'rgb(255,0,0)');
-  }
+  let png = new PNGlib(100, 100);
 
+  for (let i = 0; i < 65; i++) {
+    for (let j = 10; j < 65; j++) {
+      png.setPixel(i + 10, j + 20, '#cc0044');
+      png.setPixel(i + 20, j + 10, '#0044cc');
+      png.setPixel(i + 30, j, '#00cc44');
+    }
+  }
   res.setHeader('Content-Type', 'image/png');
   res.end(png.getBuffer());
 }).listen(3001);
@@ -114,9 +109,11 @@ Output:
 # Benchmark
 
 ```
-pnglib x 1,165 ops/sec ±2.82% (84 runs sampled)
-pnglib-es6 x 3,705 ops/sec ±4.48% (75 runs sampled)
-node-pnglib x 10,001 ops/sec ±1.32% (87 runs sampled)
+# Simple line
+
+pnglib x 1,021 ops/sec ±3.37% (76 runs sampled)
+pnglib-es6 x 3,293 ops/sec ±4.79% (79 runs sampled)
+node-pnglib x 17,027 ops/sec ±0.93% (87 runs sampled)
 Fastest is node-pnglib
 
 node v8.1.1

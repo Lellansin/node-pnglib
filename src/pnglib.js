@@ -1,16 +1,15 @@
 'use strict';
 
 import BUF from './buf';
-import RGBA from './rgba';
 import utils from './utils';
-import font from './font';
+import * as color from './color';
 
-class PNGlib {
+module.exports = class PNGlib {
   constructor (w, h, d, bg) {
     this.width  = w;
     this.height = h;
     this.depth  = d || 8;
-    this.bg     = bg;
+    this.bgColor     = bg;
 
     // pixel data and row filter identifier size
     this.pix_size = this.height * (this.width + 1);
@@ -77,8 +76,8 @@ class PNGlib {
       utils.write2lsb(this.buffer, offs, ~size);
     }
 
-    if (this.bg) this.color(this.bg);
-    else this.color(0, 0, 0, 0);
+    if (this.bgColor) this.setBgColor(this.bgColor);
+    else this.setBgColor(0, 0, 0, 0);
   }
 
   // compute the index into a png for a given pixel
@@ -89,55 +88,17 @@ class PNGlib {
   }
 
   // convert a color and build up the palette
-  color(red, green, blue, alpha) {
-    if (typeof red == 'string') {
-      let rgba = RGBA(red);
-      if (!rgba) throw new Error(`invalid color ${rgba}`);
-      [red, green, blue, alpha] = rgba;
-    } else {
-      alpha = alpha >= 0 ? alpha : 255;
+  color(...args) {
+    const rgba = color.getRGBA(args);
+    if (!this.palette.has(rgba)) {
+      return color.addColor(this, rgba);
     }
-
-    const color = (((((alpha << 8) | red) << 8) | green) << 8) | blue;
-
-    if (!this.palette.has(color)) {
-      if (this.pindex == this.depth) {
-        console.warn('node-pnglib: depth is not enough, set up it for more');
-        return BUF.CODE_NUL;
-      }
-
-      let ndx = this.plte_offs + 8 + 3 * this.pindex;
-      this.buffer[ndx++] = red;
-      this.buffer[ndx++] = green;
-      this.buffer[ndx++] = blue;
-      this.buffer[this.trns_offs + 8 + this.pindex] = alpha;
-      this.palette.set(color, this.pindex++);
-    }
-    return this.palette.get(color);
+    return this.palette.get(rgba);
   }
 
-  drawChar(ch, x = 0, y = 0, font = font.font8x16, color = '#ff0000') {
-    let idx = font.fonts.indexOf(ch);
-
-    if (idx >= 0) {
-      let fontData = font.data[idx];
-      let w = font.w;
-      let y0 = y;
-      let l = Math.ceil(w / 8);
-
-      for (let i = 0, len = font.h; i < len; ++i) {
-        let prevByteStr = utils.hexToBin(fontData[l * i]);
-        let nextByteStr = utils.hexToBin(fontData[l * i + 1]);
-        let line = (prevByteStr + nextByteStr).substr(0, w);
-
-        for (let ci = 0, lineLen = line.length; ci < lineLen; ++ci) {
-          if (line[ci] === '1') {
-            this.setPixel(x + ci, y0, color); 
-          }
-        }
-        ++y0;
-      }
-    }
+  setBgColor(...args) {
+    const rgba = color.getRGBA(args);
+    return color.setBgColor(this, rgba);
   }
 
   setPixel(x, y, rgba) {
@@ -192,8 +153,3 @@ class PNGlib {
     else return new Buffer(this.raw);
   }
 }
-
-module.exports = PNGlib;
-module.exports.font8x16 = font.font8x16;
-module.exports.font12x24 = font.font12x24;
-module.exports.font16x32 = font.font16x32;
