@@ -37,9 +37,9 @@ exports.view = (raw, len, size) => {
 function newBuf(data) {
   // TODO fit for uint8arr
   if (MAJOR > 5) {
-    return new Buffer(data, ENCODING);
+    return Buffer.from(data, ENCODING);
   }
-  return Buffer.from(data, ENCODING);
+  return new Buffer(data, ENCODING);
 }
 
 function bufAlloc(size) {
