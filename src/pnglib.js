@@ -106,6 +106,16 @@ module.exports = class PNGlib {
     this.buffer[this.index(x | 0, y | 0)] = this.color(rgba);
   }
 
+  getPixel(x, y) {
+    if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
+
+    for (let [key, value] of this.palette.entries()){
+      if (value === this.buffer[this.index(x | 0, y | 0)]){
+        return key;
+      }
+    }
+  }
+
   // output a PNG string, Base64 encoded
   getBase64() {
     return this.deflate().toString('base64');

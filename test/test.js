@@ -24,6 +24,14 @@ describe('PNGlib', () => {
     });
   });
 
+  describe('.getPixel', () => {
+    it('should return an rgba array', () => {
+      let png = new PNGlib(1, 1);
+      png.buffer[png.index(0, 0)] = png.color([255, 0, 0, 255]);
+      should.deepEqual(png.getPixel(0,0), [255, 0, 0, 255]);
+    });
+  });
+
   describe('#draw.', () => {
     it('should draw a line', () => {
       let png = new PNGlib(100, 40);
