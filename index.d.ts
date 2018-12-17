@@ -22,6 +22,8 @@ declare class NodePnglib {
 
     setPixel(x: number, y: number, rgba: RGBA): void
 
+    getPixel(x: number, y: number): number
+
     getBase64(): string
 
     getBuffer(): Buffer
