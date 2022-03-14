@@ -69,14 +69,13 @@ const PNGlib = require('node-pnglib');
 http.createServer(function (req, res) {
   if(req.url == '/favicon.ico') return res.end('');
 
-  let png = new PNGlib(100, 100);
-
-  for (let i = 0; i < 65; i++) {
-    for (let j = 10; j < 65; j++) {
-      png.setPixel(i + 10, j + 20, '#cc0044');
-      png.setPixel(i + 20, j + 10, '#0044cc');
-      png.setPixel(i + 30, j, '#00cc44');
-    }
+  let png = new PNGlib(100, 40);
+  for (let i = 0, num = 100 / 10; i <= num; i += .01) {
+    let x = i * 10;
+    let y = Math.sin(i) * 10 + 20;
+    png.setPixel(x, (y - 10), '#0000FF');
+    png.setPixel(x, (y), '#FF0000');
+    png.setPixel(x, (y + 10), 'rgb(0,255,0)');
   }
   res.setHeader('Content-Type', 'image/png');
   res.end(png.getBuffer());
