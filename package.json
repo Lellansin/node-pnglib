@@ -25,14 +25,19 @@
     "backend"
   ],
   "author": "lellansin",
-  "contributors": [ { "name": "geemo", "email": "153330685@qq.com" } ],
+  "contributors": [
+    {
+      "name": "geemo",
+      "email": "153330685@qq.com"
+    }
+  ],
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/Lellansin/node-pnglib/issues"
   },
   "homepage": "https://github.com/Lellansin/node-pnglib#readme",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",

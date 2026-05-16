@@ -15,7 +15,10 @@ module.exports = class PNGlib {
     this.pix_size = this.height * (this.width + 1);
 
     // deflate header, pix_size, block headers, adler32 checksum
-    this.data_size = 2 + this.pix_size + 5 * (((0xfffe + this.pix_size) / 0xffff) | 0) + 4;
+    this.data_size = 2 + this.pix_size + 5 * Math.ceil(this.pix_size / 0xffff) + 4;
+
+    // maximum pixel data per deflate stored block
+    this.blk_size = 0xffff;
 
     // offsets and sizes of Png chunks
     this.ihdr_offs = 0;                               // IHDR offset and size
@@ -61,16 +64,16 @@ module.exports = class PNGlib {
     utils.write2(this.buffer, this.idat_offs + 8, BUF.PNG_DEFLATE_HEADER);
 
     // initialize deflate block headers
-    for (let i = 0; (i << 16) - 1 < this.pix_size; ++i) {
+    for (let i = 0; i * this.blk_size < this.pix_size; ++i) {
       let size, bits;
-      if (i + 0xffff < this.pix_size) {
-        size = 0xffff;
+      if ((i + 1) * this.blk_size <= this.pix_size) {
+        size = this.blk_size;
         bits = BUF.CODE_NUL;
       } else {
-        size = this.pix_size - (i << 16) - i;
+        size = this.pix_size - i * this.blk_size;
         bits = BUF.CODE_SOH;
       }
-      let offs = this.idat_offs + 8 + 2 + (i << 16) + (i << 2);
+      let offs = this.idat_offs + 8 + 2 + i * (this.blk_size + 5);
       offs = utils.writeb(this.buffer, offs, bits);
       offs = utils.write2lsb(this.buffer, offs, size);
       utils.write2lsb(this.buffer, offs, ~size);
@@ -84,7 +87,7 @@ module.exports = class PNGlib {
   index(x, y) {
     let i = y * (this.width + 1) + x + 1;
     let offset = this.idat_offs + 8 + 2 + 5;
-    return offset * ((i / 0xffff) | 0 + 1) + i;
+    return offset + 5 * ((i / this.blk_size) | 0) + i;
   }
 
   // convert a color and build up the palette
