@@ -13,6 +13,8 @@ describe('PNGlib', () => {
     PNG.BLOCK = fs.readFileSync(path.join(__dirname, '../example/block.png'));
     PNG.WAVE = fs.readFileSync(path.join(__dirname, '../example/wave.png'));
     PNG.OUT_RANGE = fs.readFileSync(path.join(__dirname, '../example/out_range.png'));
+    PNG.LARGE_300 = fs.readFileSync(path.join(__dirname, '../example/large_300.png'));
+    PNG.LARGE_256x257 = fs.readFileSync(path.join(__dirname, '../example/large_256x257.png'));
   })
 
   describe('.setPixel', () => {
@@ -78,6 +80,33 @@ describe('PNGlib', () => {
       }
 
       should.deepEqual(png.getBuffer(), PNG.OUT_RANGE);
+    });
+
+    it('should generate a complete 300x300 image (multi-block regression test, issue #11).', () => {
+      let png = new PNGlib(300, 300, undefined, 'red');
+      for (let y = 0; y < 300; y++) {
+        for (let x = 0; x < 300; x++) {
+          png.setPixel(x, y, 'blue');
+        }
+      }
+      let buf = png.getBuffer();
+      should.deepEqual(buf, PNG.LARGE_300);
+      // Verify PNG header dimensions
+      should.equal(buf.readUInt32BE(16), 300); // width
+      should.equal(buf.readUInt32BE(20), 300); // height
+    });
+
+    it('should generate a complete 256x257 image (multi-block edge case).', () => {
+      let png = new PNGlib(256, 257, undefined, 'red');
+      for (let y = 0; y < 257; y++) {
+        for (let x = 0; x < 256; x++) {
+          png.setPixel(x, y, 'blue');
+        }
+      }
+      let buf = png.getBuffer();
+      should.deepEqual(buf, PNG.LARGE_256x257);
+      should.equal(buf.readUInt32BE(16), 256);
+      should.equal(buf.readUInt32BE(20), 257);
     });
   });
 });
