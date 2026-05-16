@@ -24,6 +24,21 @@ describe('PNGlib', () => {
       should.equal(png.getBase64(),
         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAAGFBMVEUAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAXHRiAAAACHRSTlMA/wAAAAAAACXRGJEAAAANSURBVHjaAQIA/f8AAQADAAL2gI4NAAAAAElFTkSuQmCC');
     });
+
+    it('should clamp out-of-range array color values (issue #19).', () => {
+      let png = new PNGlib(1, 1);
+      // Values above 255 should be clamped down
+      let idx = png.color([300, 128, 400, 255]);
+      let plteOff = png.plte_offs + 8 + 3 * idx;
+      should.equal(png.buffer[plteOff], 255);     // red clamped to 255
+      should.equal(png.buffer[plteOff + 1], 128);  // green unchanged
+      should.equal(png.buffer[plteOff + 2], 255);  // blue clamped to 255
+    });
+
+    it('should reject negative array color values.', () => {
+      let png = new PNGlib(1, 1);
+      should.throws(() => png.color([-50, 0, 0, 255]), /Invalid color/);
+    });
   });
 
   describe('#draw.', () => {
