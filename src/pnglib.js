@@ -66,7 +66,7 @@ module.exports = class PNGlib {
     // initialize deflate block headers
     for (let i = 0; i * this.blk_size < this.pix_size; ++i) {
       let size, bits;
-      if ((i + 1) * this.blk_size <= this.pix_size) {
+      if ((i + 1) * this.blk_size < this.pix_size) {
         size = this.blk_size;
         bits = BUF.CODE_NUL;
       } else {
@@ -129,15 +129,18 @@ module.exports = class PNGlib {
     let s2 = 0;
     let n = NMAX;
     
-    let index = this.index(-1, 0);
-    let count = this.height * (this.width + 1);
-    for (let i = 0; i < count; ++i) {
-      s1 += this.buffer[index++];
-      s2 += s1;
-      if ((n -= 1) === 0) {
-        s1 %= BASE;
-        s2 %= BASE;
-        n = NMAX;
+    // Iterate pixel data using index() to skip deflate block headers.
+    // Sequential reads would include the 5-byte block headers as pixel data.
+    for (let y = 0; y < this.height; ++y) {
+      for (let x = -1; x < this.width; ++x) {
+        let val = this.buffer[this.index(x, y)];
+        s1 += val;
+        s2 += s1;
+        if ((n -= 1) === 0) {
+          s1 %= BASE;
+          s2 %= BASE;
+          n = NMAX;
+        }
       }
     }
     s1 %= BASE;
