@@ -21,7 +21,8 @@ export function getRGBA(args) {
     return CACHE.get(color);
   }
   if (red >= 0 && green >= 0 && blue >= 0 ) {
-    let res = [red, green, blue, alpha >= 0 ? alpha : 255];
+    function clamp(v) { return v > 255 ? 255 : v; }
+    let res = [clamp(red), clamp(green), clamp(blue), alpha >= 0 ? alpha : 255];
     CACHE.set(color, res);
     return res;
   }
