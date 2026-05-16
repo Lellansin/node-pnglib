@@ -145,17 +145,21 @@ The image data uses **row filter byte 0** (None) for every row. When the pixel d
 
 ## Benchmark
 
-```
-# Simple line (100×40)
+150×50 image, drawing a horizontal line of 75 pixels (magenta `#F0F`), then serializing to PNG buffer.
 
-pnglib       x   1,021 ops/sec ±3.37%
-pnglib-es6   x   3,293 ops/sec ±4.79%
-node-pnglib  x  17,027 ops/sec ±0.93%   ← fastest
+| Package | Color mode | ops/sec | vs fastest |
+|---------|-----------|--------:|-----------:|
+| **node-pnglib** | indexed palette | **35,270** | **100%** |
+| pnglib-es6 | indexed palette | 17,127 | 48.6% |
+| pnglib | indexed palette | 12,652 | 35.9% |
+| fast-png | RGBA truecolor | 5,640 | 16.0% |
+| pngjs | RGBA truecolor | 5,545 | 15.7% |
 
-node v8.1.1 · MacBook Pro (Retina, 13-inch, Early 2015) · 2.7 GHz Intel Core i5
-```
+*Node.js 24 · Apple M-series MacBook Pro, 2026*
 
-Full benchmarks at [bench/](https://github.com/Lellansin/node-pnglib/blob/master/bench/).
+node-pnglib is the fastest primarily because it uses indexed palette (1 byte/pixel) with stored (no-compression) DEFLATE blocks, while general-purpose PNG libraries output RGBA truecolor (4 bytes/pixel) with full zlib compression.
+
+Full benchmark source at [bench/compare.js](https://github.com/Lellansin/node-pnglib/blob/master/bench/compare.js). Historical results on older hardware are in [bench/test.js](https://github.com/Lellansin/node-pnglib/blob/master/bench/test.js).
 
 ---
 
