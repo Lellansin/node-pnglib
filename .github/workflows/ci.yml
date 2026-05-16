@@ -84,11 +84,13 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies (no postinstall for old compat)
+        run: npm install --ignore-scripts
 
-      - name: Install Playwright browsers
-        run: npx playwright install chromium
+      - name: Install browser test tools
+        run: |
+          npm install --save-dev --ignore-scripts @playwright/test esbuild
+          npx playwright install chromium
 
       - name: Build (esbuild)
         run: npx esbuild src/pnglib.js --bundle --format=esm --outfile=browser-test/bundle.mjs
