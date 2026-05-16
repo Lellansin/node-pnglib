@@ -6,6 +6,9 @@ import * as color from './color';
 
 module.exports = class PNGlib {
   constructor (w, h, d, bg) {
+    if (typeof w !== 'number' || typeof h !== 'number' || w < 1 || h < 1) {
+      throw new Error('Invalid PNG dimensions: width and height must be positive integers');
+    }
     this.width   = w;
     this.height  = h;
     this.depth   = d || 8;
