@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>node-pnglib browser test</title></head>
+<body>
+<script type="module">
+import PNGlib from './bundle.mjs';
+
+const tests = [];
+
+function assert(cond, msg) {
+  if (!cond) throw new Error('FAIL: ' + msg);
+  tests.push('✓ ' + msg);
+}
+
+// 1. Basic construction
+let png = new PNGlib(1, 1);
+assert(png.width === 1, 'width');
+assert(png.height === 1, 'height');
+
+// 2. setPixel and getBuffer returns Uint8Array
+png.setPixel(0, 0, 'red');
+let buf = png.getBuffer();
+assert(buf instanceof Uint8Array, 'getBuffer returns Uint8Array in browser');
+
+// 3. PNG signature
+assert(buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47,
+  'PNG magic bytes');
+
+// 4. IHDR dimensions
+let w = (buf[16] << 24) | (buf[17] << 16) | (buf[18] << 8) | buf[19];
+let h = (buf[20] << 24) | (buf[21] << 16) | (buf[22] << 8) | buf[23];
+assert(w === 1, 'IHDR width');
+assert(h === 1, 'IHDR height');
+
+// 5. blob URL creation
+let blob = new Blob([buf], { type: 'image/png' });
+let url = URL.createObjectURL(blob);
+assert(typeof url === 'string' && url.startsWith('blob:'), 'createObjectURL');
+
+// 6. Larger image (multi-block, 300x300)
+let big = new PNGlib(300, 300, undefined, 'white');
+for (let y = 0; y < 300; y++)
+  for (let x = 0; x < 300; x++)
+    big.setPixel(x, y, 'blue');
+let bigBuf = big.getBuffer();
+assert(bigBuf.length > 90000, 'large image buffer size');
+
+// Read back width/height from IHDR
+let bw = (bigBuf[16] << 24) | (bigBuf[17] << 16) | (bigBuf[18] << 8) | bigBuf[19];
+let bh = (bigBuf[20] << 24) | (bigBuf[21] << 16) | (bigBuf[22] << 8) | bigBuf[23];
+assert(bw === 300 && bh === 300, 'large image dimensions');
+
+// 7. getBase64
+let b64 = big.getBase64();
+assert(typeof b64 === 'string' && b64.length > 1000, 'getBase64 string');
+
+// 8. Color parsing
+assert(png.color('#ff0000') >= 0, 'hex color parsing');
+assert(png.color('rgb(0, 255, 0)') >= 0, 'rgb parsing');
+
+document.getElementById('results').textContent = tests.join('\n');
+document.getElementById('summary').textContent =
+  tests.length + ' tests passed';
+</script>
+<pre id="results" style="font-family:monospace;padding:1em;background:#f5f5f5"></pre>
+<h2 id="summary" style="color:green"></h2>
+</body>
+</html>
