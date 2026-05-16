@@ -26,6 +26,16 @@ describe('PNGlib', () => {
     });
   });
 
+  describe('constructor', () => {
+    it('should reject invalid dimensions (issue #20).', () => {
+      should.throws(() => new PNGlib(0, 1), /Invalid PNG dimensions/);
+      should.throws(() => new PNGlib(1, 0), /Invalid PNG dimensions/);
+      should.throws(() => new PNGlib(0, 0), /Invalid PNG dimensions/);
+      should.throws(() => new PNGlib(-1, 1), /Invalid PNG dimensions/);
+      should.throws(() => new PNGlib('a', 1), /Invalid PNG dimensions/);
+    });
+  });
+
   describe('#draw.', () => {
     it('should draw a line', () => {
       let png = new PNGlib(100, 40);
