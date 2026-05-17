@@ -34,12 +34,6 @@ exports.view = (raw, len, size) => {
   return u8aView(len, size);
 };
 
-// Browser-compatible Buffer.isBuffer substitute
-exports.isRawBuffer = function isRawBuffer(raw) {
-  return raw instanceof Uint8Array || raw instanceof ArrayBuffer ||
-    (typeof Buffer !== 'undefined' && Buffer.isBuffer(raw));
-};
-
 function newBuf(data) {
   if (typeof Buffer !== 'undefined') {
     if (MAJOR > 5) {
