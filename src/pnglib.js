@@ -159,7 +159,11 @@ module.exports = class PNGlib {
     utils.crc32(this.buffer, this.iend_offs, this.iend_size);
 
     // Browser: raw is already a Uint8Array covering the full PNG.
-    // Node: raw is a Buffer. Return as-is in either case.
+    // Node 6+: raw is a Buffer already. Node 4/5: raw may be a Uint8Array,
+    // so convert to Buffer for .toString('base64') compatibility.
+    if (typeof Buffer !== 'undefined' && !Buffer.isBuffer(this.raw)) {
+      return new Buffer(this.raw);
+    }
     return this.raw;
   }
 }
