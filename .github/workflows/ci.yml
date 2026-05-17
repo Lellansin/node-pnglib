@@ -73,3 +73,27 @@ jobs:
 
       - name: Test
         run: npm test
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies (no postinstall for old compat)
+        run: npm install --ignore-scripts
+
+      - name: Install browser test tools
+        run: |
+          npm install --save-dev --ignore-scripts @playwright/test esbuild
+          npx playwright install chromium
+
+      - name: Build (esbuild)
+        run: npx esbuild src/pnglib.js --bundle --format=esm --outfile=browser-test/bundle.mjs
+
+      - name: Browser test
+        run: npx playwright test --config browser-test/playwright.config.js

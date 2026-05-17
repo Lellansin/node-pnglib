@@ -28,18 +28,25 @@ exports.alloc = (size) => {
 };
 
 exports.view = (raw, len, size) => {
-  if (MAJOR > 5) {
+  if (MAJOR > 5 && typeof Buffer !== 'undefined') {
     return bufView(raw, len, size);
   }
   return u8aView(len, size);
 };
 
 function newBuf(data) {
-  // TODO fit for uint8arr
-  if (MAJOR > 5) {
-    return Buffer.from(data, ENCODING);
+  if (typeof Buffer !== 'undefined') {
+    if (MAJOR > 5) {
+      return Buffer.from(data, ENCODING);
+    }
+    return new Buffer(data, ENCODING);
   }
-  return new Buffer(data, ENCODING);
+  // Browser: Latin-1 / binary encoding via char codes
+  var arr = new Uint8Array(data.length);
+  for (var i = 0; i < data.length; i++) {
+    arr[i] = data.charCodeAt(i) & 0xff;
+  }
+  return arr;
 }
 
 function bufAlloc(size) {

@@ -114,7 +114,16 @@ module.exports = class PNGlib {
 
   // output a PNG string, Base64 encoded
   getBase64() {
-    return this.deflate().toString('base64');
+    var raw = this.deflate();
+    if (typeof Buffer !== 'undefined') {
+      return raw.toString('base64');
+    }
+    // Browser: Uint8Array → base64 via btoa
+    var bin = '';
+    for (var i = 0; i < raw.length; i++) {
+      bin += String.fromCharCode(raw[i]);
+    }
+    return btoa(bin);
   }
 
   // output a PNG buffer
@@ -158,7 +167,12 @@ module.exports = class PNGlib {
     utils.crc32(this.buffer, this.idat_offs, this.idat_size);
     utils.crc32(this.buffer, this.iend_offs, this.iend_size);
 
-    if (Buffer.isBuffer(this.raw)) return this.raw;
-    else return new Buffer(this.raw);
+    // Browser: raw is already a Uint8Array covering the full PNG.
+    // Node 6+: raw is a Buffer already. Node 4/5: raw may be a Uint8Array,
+    // so convert to Buffer for .toString('base64') compatibility.
+    if (typeof Buffer !== 'undefined' && !Buffer.isBuffer(this.raw)) {
+      return new Buffer(this.raw);
+    }
+    return this.raw;
   }
 }
