@@ -53,6 +53,9 @@ assert(bw === 300 && bh === 300, 'large image dimensions');
 // 7. getBase64
 let b64 = big.getBase64();
 assert(typeof b64 === 'string' && b64.length > 1000, 'getBase64 string');
+// Verify it's actually valid base64 (PNG magic bytes after decode)
+let decoded = atob(b64);
+assert(decoded.charCodeAt(0) === 0x89 && decoded.charCodeAt(1) === 0x50, 'getBase64 valid base64');
 
 // 8. Color parsing
 assert(png.color('#ff0000') >= 0, 'hex color parsing');

@@ -114,7 +114,16 @@ module.exports = class PNGlib {
 
   // output a PNG string, Base64 encoded
   getBase64() {
-    return this.deflate().toString('base64');
+    var raw = this.deflate();
+    if (typeof Buffer !== 'undefined') {
+      return raw.toString('base64');
+    }
+    // Browser: Uint8Array → base64 via btoa
+    var bin = '';
+    for (var i = 0; i < raw.length; i++) {
+      bin += String.fromCharCode(raw[i]);
+    }
+    return btoa(bin);
   }
 
   // output a PNG buffer
