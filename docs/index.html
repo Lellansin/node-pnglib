@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>node-pnglib — Fastest Pure JavaScript PNG Encoder</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --fg: #c9d1d9;
+    --muted: #8b949e;
+    --border: #30363d;
+    --link: #58a6ff;
+    --code-bg: #161b22;
+    --accent: #f78166;
+    --table-stripe: #161b22;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  h1 { font-size: 2rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.4rem; margin: 2.5rem 0 .75rem; padding-bottom: .35rem; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+  p { margin: .75rem 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    background: var(--code-bg);
+    padding: .15em .4em;
+    border-radius: 4px;
+    font-size: .9em;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: .75rem 0;
+    border: 1px solid var(--border);
+  }
+  pre code { padding: 0; background: none; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .75rem 0;
+  }
+  th, td {
+    text-align: left;
+    padding: .5rem .75rem;
+    border: 1px solid var(--border);
+  }
+  th { background: var(--code-bg); font-weight: 600; }
+  tr:nth-child(even) { background: var(--table-stripe); }
+  .badge { display: inline-block; margin-right: .5rem; }
+  .badge img { height: 20px; }
+  .note {
+    background: var(--code-bg);
+    border-left: 3px solid var(--accent);
+    padding: .75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .header-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .9rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>node-pnglib</h1>
+<p class="header-sub">
+  <span class="badge"><img src="https://badge.fury.io/js/node-pnglib.svg" alt="npm version"></span>
+  <span class="badge"><img src="https://github.com/Lellansin/node-pnglib/actions/workflows/ci.yml/badge.svg" alt="CI"></span>
+</p>
+<p>Fastest pure JavaScript PNG encoder for Node.js — up to <strong>2× faster</strong> than alternatives.</p>
+<p>Port of <a href="http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript/">PNGlib</a>. Zero runtime dependencies. Generates indexed-color (palette) PNGs with no external tooling.</p>
+
+<h2>Installation</h2>
+<pre><code>npm install node-pnglib</code></pre>
+
+<h2>Quick Start</h2>
+<p><strong>Minimal 1×1 red pixel:</strong></p>
+<pre><code>const PNGlib = require('node-pnglib');
+const png = new PNGlib(1, 1);
+png.buffer[png.index(0, 0)] = png.color('red');
+require('fs').writeFileSync('out.png', png.getBuffer());</code></pre>
+
+<p><strong>300×300 blue square (multi-block stress test):</strong></p>
+<pre><code>const PNGlib = require('node-pnglib');
+const png = new PNGlib(300, 300, undefined, 'white');
+for (let y = 0; y &lt; 300; y++)
+  for (let x = 0; x &lt; 300; x++)
+    png.setPixel(x, y, 'blue');
+require('fs').writeFileSync('blue.png', png.getBuffer());</code></pre>
+
+<h2>API Reference</h2>
+
+<h3>new PNGlib(width, height, depth?, backgroundColor?)</h3>
+<p>Creates a new PNG canvas.</p>
+<table>
+  <tr><th>Param</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  <tr><td><code>width</code></td><td>number</td><td>—</td><td>Width in pixels (must be ≥ 1)</td></tr>
+  <tr><td><code>height</code></td><td>number</td><td>—</td><td>Height in pixels (must be ≥ 1)</td></tr>
+  <tr><td><code>depth</code></td><td>number</td><td>8</td><td>Color palette depth (max colors = 2^depth)</td></tr>
+  <tr><td><code>backgroundColor</code></td><td>ColorArg</td><td>[0,0,0,0]</td><td>Transparent black by default</td></tr>
+</table>
+
+<h3>png.index(x, y) → number</h3>
+<p>Returns the buffer index for a pixel position. Pass <code>x=-1</code> for the row filter byte.</p>
+
+<h3>png.color(colorArg) → number</h3>
+<p>Resolves a color to a palette index. Adds the color to the palette if unseen.</p>
+<table>
+  <tr><th>Input format</th><th>Examples</th></tr>
+  <tr><td><code>[R, G, B, A]</code></td><td><code>[255, 0, 0, 255]</code></td></tr>
+  <tr><td>Named color</td><td><code>'red'</code>, <code>'blue'</code>, <code>'transparent'</code></td></tr>
+  <tr><td>Hex</td><td><code>'#ff0000'</code>, <code>'#f00'</code>, <code>'#ff000080'</code></td></tr>
+  <tr><td>rgb/rgba</td><td><code>'rgb(255,0,0)'</code>, <code>'rgba(255,0,0,0.5)'</code></td></tr>
+  <tr><td>hsl/hsla</td><td><code>'hsl(0,100%,50%)'</code></td></tr>
+</table>
+
+<h3>png.setPixel(x, y, colorArg)</h3>
+<p>Sets a pixel. Silently ignores out-of-bounds coordinates.</p>
+
+<h3>png.setBgColor(colorArg) → number</h3>
+<p>Sets the background color (palette index 0).</p>
+
+<h3>png.getBuffer() → Buffer</h3>
+<p>Returns the complete PNG as a Buffer.</p>
+
+<h3>png.getBase64() → string</h3>
+<p>Returns the PNG as a Base64-encoded string.</p>
+
+<h3>png.deflate() → Buffer</h3>
+<p>Same as <code>getBuffer()</code> — finalizes the PNG with checksums.</p>
+
+<h2>Color Formats</h2>
+<pre><code>png.color([255, 0, 0, 255]);         // Array RGBA
+png.color('red');                     // Named color
+png.color('#ff0000');                 // Hex 6-digit
+png.color('#f00');                    // Hex 3-digit
+png.color('#ff000080');              // Hex 8-digit (with alpha)
+png.color('rgb(255, 0, 0)');         // rgb()
+png.color('rgba(255, 0, 0, 0.5)');   // rgba()
+png.color('hsl(0, 100%, 50%)');      // hsl()
+png.color('transparent');            // [0, 0, 0, 0]</code></pre>
+
+<h2>Benchmark</h2>
+<p>150×50 image, drawing a horizontal line of 75 pixels (magenta <code>#F0F</code>), then serializing to PNG buffer.</p>
+<table>
+  <tr><th>Package</th><th>Color mode</th><th>ops/sec</th><th>vs fastest</th></tr>
+  <tr><td><strong>node-pnglib</strong></td><td>indexed palette</td><td><strong>35,270</strong></td><td><strong>100%</strong></td></tr>
+  <tr><td>pnglib-es6</td><td>indexed palette</td><td>17,127</td><td>48.6%</td></tr>
+  <tr><td>pnglib</td><td>indexed palette</td><td>12,652</td><td>35.9%</td></tr>
+  <tr><td>fast-png</td><td>RGBA truecolor</td><td>5,640</td><td>16.0%</td></tr>
+  <tr><td>pngjs</td><td>RGBA truecolor</td><td>5,545</td><td>15.7%</td></tr>
+</table>
+<div class="note">Node.js 24 · Apple M-series MacBook Pro, 2026</div>
+
+<div class="note">
+  <strong>Why so fast?</strong> node-pnglib uses indexed palette (1 byte/pixel) with stored (no-compression) DEFLATE blocks, while general-purpose PNG libraries output RGBA truecolor (4 bytes/pixel) with full zlib compression.
+</div>
+
+<h2>Internal Architecture</h2>
+<ol>
+  <li><strong>Header</strong>: PNG signature + IHDR chunk</li>
+  <li><strong>Palette</strong>: PLTE chunk + tRNS transparency chunk</li>
+  <li><strong>Pixel data</strong>: IDAT chunk with raw DEFLATE stored blocks</li>
+  <li><strong>Footer</strong>: IEND chunk</li>
+</ol>
+
+<h2>License</h2>
+<p>BSD-2-Clause</p>
+
+<footer>
+  <a href="https://github.com/Lellansin/node-pnglib">View on GitHub</a> · npm: <code>node-pnglib</code>
+</footer>
+
+</body>
+</html>
