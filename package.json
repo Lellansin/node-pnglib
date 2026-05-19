@@ -48,8 +48,5 @@
     "pnglib": "0.0.1",
     "pnglib-es6": "^1.0.1",
     "should": "^11.2.1"
-  },
-  "dependencies": {
-    "color-name": "^1.1.3"
   }
 }
